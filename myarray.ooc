@@ -87,18 +87,26 @@ MyArray: cover template <T> {
     }
 
     join: func ~auto (separator := "") -> String {
-        match T {
-            case Char =>
-                join(|v| "%c" format(v as Char), separator)
-            case String =>
-                join(|v| v as String, separator)
-            case Float =>
-                join(|v| "%.2f" format(v as Float), separator)
-            case Int =>
-                join(|v| "%d" format(v as Int), separator)
-            case =>
-                join(|v| "[%s]" format(T name), separator)
-        }
+        result: String
+        _defaultToString(T, |f|
+            result = join(|v| f(v), separator)
+        )
+        result
+    }
+}
+
+_defaultToString: func <T> (T: Class, cb: Func (Func (T) -> String)) {
+    match T {
+        case Char =>
+            cb(|v| "%c" format(v as Char))
+        case String =>
+            cb(|v| v as String)
+        case Float =>
+            cb(|v| "%.2f" format(v as Float))
+        case Int =>
+            cb(|v| "%d" format(v as Int))
+        case =>
+            cb(|v| "[%s]" format(T name))
     }
 }
 
