@@ -35,7 +35,7 @@ MyArray: cover template <T> {
         get(i)
     }
 
-    operator []= (i: Int, v: T) {
+    operator@ []= (i: Int, v: T) {
         set(i, v)
     }
 
